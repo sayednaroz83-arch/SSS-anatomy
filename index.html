@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Offline Practical Quiz</title>
+
+<style>
+body {
+  font-family: Arial;
+  text-align: center;
+}
+img {
+  max-width: 400px;
+  margin: 15px;
+  border: 2px solid black;
+}
+textarea {
+  width: 80%;
+  height: 45px;
+  margin-bottom: 10px;
+}
+button {
+  padding: 10px 25px;
+  font-size: 16px;
+}
+</style>
+</head>
+
+<body>
+
+<h2 id="timer"></h2>
+
+<img id="img">
+
+<h3>Identify A</h3>
+<textarea id="A"></textarea>
+
+<h3>Identify B</h3>
+<textarea id="B"></textarea>
+
+<h3>Identify C</h3>
+<textarea id="C"></textarea>
+
+<br><br>
+<button onclick="next()">Next</button>
+
+<script>
+const images = [
+  "Slide1.jpg","Slide2.jpg","Slide3.jpg","Slide4.jpg","Slide5.jpg","Slide6.jpg",
+  "Slide7.jpg","Slide8.jpg","Slide9.jpg","Slide10.jpg","Slide11.jpg","Slide12.jpg",
+  "Slide13.jpg","Slide14.jpg","Slide15.jpg","Slide16.jpg","Slide17.jpg","Slide18.jpg",
+  "Slide19.jpg","Slide20.jpg","Slide21.jpg","Slide22.jpg","Slide23.jpg","Slide24.jpg",
+  "Slide25.jpg","Slide26.jpg","Slide27.jpg","Slide28.jpg","Slide29.jpg","Slide30.jpg",
+  "Slide31.jpg","Slide32.jpg","Slide33.jpg","Slide34.jpg","Slide35.jpg","Slide36.jpg"
+];
+
+const answers = {
+  "Slide1.jpg": {
+    A: ["coronal plane"],
+    B: ["sagittal plane"],
+    C: ["transverse plane, horizontal plane"]
+  },
+  "Slide2.jpg": {
+    A: ["long bone"],
+    B: ["short bone"],
+    C: ["flat bone"]
+  },
+  "Slide3.jpg": {
+    A: ["short bone"],
+    B: ["flat bone"],
+    C: ["irregular bone"]
+  },
+ "Slide4.jpg": {
+    A: ["cartilagenous joint"],
+    B: ["fibrous joint"],
+    C: ["synovial joint"]
+  },
+ "Slide5.jpg": {
+    A: ["cardiac muscle"],
+    B: ["skeletal muscle"],
+    C: ["smooth muscle"]
+  },
+ "Slide6.jpg": {
+    A: ["synovial membrane"],
+    B: ["synovial fluid"],
+    C: ["hyaline cartilage"]
+  },
+ "Slide7.jpg": {
+    A: ["hyaline cartilage"],
+    B: ["capsular ligament"],
+    C: ["accessory ligament"]
+  },
+ "Slide8.jpg": {
+    A: ["plane joint"],
+    B: ["hinge joint"],
+    C: ["pivot joint"]
+  },
+ "Slide9.jpg": {
+    A: ["nose"],
+    B: ["pharynx"],
+    C: ["larynx"]
+  },
+ "Slide10.jpg": {
+    A: ["bronchi"],
+    B: ["lung"],
+    C: ["trachea"]
+  },
+ "Slide11.jpg": {
+    A: ["right atrium"],
+    B: ["right ventricle"],
+    C: ["left ventricle"]
+  },
+ "Slide12.jpg": {
+    A: ["superior vena cava"],
+    B: ["aorta"],
+    C: ["pulmonary artery"]
+  },
+ "Slide13.jpg": {
+    A: ["nasopharynx"],
+    B: ["oropharynx"],
+    C: ["layngeopharynx"]
+  },
+ "Slide14.jpg": {
+    A: ["fundus"],
+    B: ["body"],
+    C: ["pylorus"]
+  },
+ "Slide15.jpg": {
+    A: ["pylorus"],
+    B: ["oesphagus"],
+    C: ["duodenum"]
+  },
+ "Slide16.jpg": {
+    A: ["stomach"],
+    B: ["duodenum"],
+    C: ["jejunum"]
+  },
+ "Slide17.jpg": {
+    A: ["stomach"],
+    B: ["duodenum"],
+    C: ["ilium"]
+  },
+ "Slide18.jpg": {
+    A: ["caecum"],
+    B: ["ascending colon"],
+    C: ["transverse colon"]
+  },
+ "Slide19.jpg": {
+    A: ["descending colon"],
+    B: ["sigmoid colon"],
+    C: ["rectum"]
+  },
+ "Slide20.jpg": {
+    A: ["caecum"],
+    B: ["ascending colon"],
+    C: ["mesocolon"]
+  },
+ "Slide21.jpg": {
+    A: ["uterus"],
+    B: ["ovary"],
+    C: ["uterine"]
+  },
+ "Slide22.jpg": {
+    A: ["uterus"],
+    B: ["ovary"],
+    C: ["vagina"]
+  },
+ "Slide23.jpg": {
+    A: ["kidney"],
+    B: ["ureter"],
+    C: ["urinary bladder"]
+  },
+ "Slide24.jpg": {
+    A: ["kidney"],
+    B: ["ureter"],
+    C: ["urethra"]
+  },
+ "Slide25.jpg": {
+    A: ["fibrous tissue"],
+    B: ["renal pelvis"],
+    C: ["ureter"]
+  },
+ "Slide26.jpg": {
+    A: ["vas deferens"],
+    B: ["pubic bone"],
+    C: ["penis"]
+  },
+ "Slide27.jpg": {
+    A: ["urethra"],
+    B: ["scrotum"],
+    C: ["testicle"]
+  },
+ "Slide28.jpg": {
+    A: ["epididymis"],
+    B: ["prostate"],
+    C: ["rectum"]
+  },
+ "Slide29.jpg": {
+    A: ["rectum"],
+    B: ["ejaculatory duct"],
+    C: ["seminal vesicle"]
+  },
+ "Slide30.jpg": {
+    A: ["head of epididymis"],
+    B: ["seminiferous tubules "],
+    C: ["tunica albuginea"]
+  },
+ "Slide31.jpg": {
+    A: ["vas deferens"],
+    B: ["body of epididymis"],
+    C: ["tall of epididymis"]
+  },
+ "Slide32.jpg": {
+    A: ["vagina"],
+    B: ["cervix"],
+    C: ["endometrium"]
+  },
+ "Slide33.jpg": {
+    A: ["ovary"],
+    B: ["fimbriae"],
+    C: ["fallopian tubes"]
+  },
+ "Slide34.jpg": {
+    A: ["fimbriae"],
+    B: ["fallopian tubes"],
+    C: ["uterus"]
+  },
+ "Slide35.jpg": {
+    A: ["frontal lobe"],
+    B: ["temporal lobe"],
+    C: ["spinal cord"]
+  },
+ "Slide36.jpg": {
+    A: ["parietal lobe"],
+    B: ["occipital lobe"],
+    C: ["cerebellum"]
+  },
+
+ };
+
+
+let selected = images.sort(() => 0.5 - Math.random()).slice(0, 5);
+let index = 0;
+let score = 0;
+let time = 18 * 60;
+
+function showImage() {
+  document.getElementById("img").src = "images/" + selected[index];
+}
+
+function next() {
+  let img = selected[index];
+
+  ["A","B","C"].forEach(part => {
+    let user = document.getElementById(part).value.toLowerCase();
+    if (
+      answers[img] &&
+      answers[img][part] &&
+      answers[img][part].some(k => user.includes(k))
+    ) {
+      score++;
+    }
+    document.getElementById(part).value = "";
+  });
+
+  index++;
+  if (index >= selected.length) finish();
+  else showImage();
+}
+
+function finish() {
+  alert("Exam Finished\nScore: " + score);
+  location.reload();
+}
+
+setInterval(() => {
+  time--;
+  document.getElementById("timer").innerText =
+    "Time Left: " + Math.floor(time / 60) + ":" + (time % 60).toString().padStart(2,"0");
+  if (time <= 0) finish();
+}, 1000);
+
+showImage();
+</script>
+
+</body>
+</html>
